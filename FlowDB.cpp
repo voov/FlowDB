@@ -92,6 +92,9 @@ public:
 				elemCount++;
 
 				// now fix the revision, if the key is the same
+				if(elements[i].key == elements[i+1].key) {
+					elements[i].revision = elements[i+1].revision+1; // increment the revision
+				}
 
 				return i;
 			}
