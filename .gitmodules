@@ -1,0 +1,3 @@
+[submodule "FlowDB"]
+	path = FlowDB
+	url = git@github.com:voov/FlowDB.git
