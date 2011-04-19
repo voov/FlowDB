@@ -17,31 +17,42 @@ ManagedMemory::~ManagedMemory() {
 
 void ManagedMemory::CloseFile() {
 	munmap(mem, curSize);
-	close(fileHandle);
+	fclose(fileHandle);
 }
 
 void ManagedMemory::AllocateSpace() {
 	if(!fileHandle) exit(-1);
-	lseek(fileHandle, curSize-1, SEEK_SET);
-	write(fileHandle, '\0', 1);
+	fseek(fileHandle, curSize-1, SEEK_SET);
+	fputc('\0', fileHandle);
+	fseek(fileHandle, 0, SEEK_SET);
 }
 
-void ManagedMemory::OpenFile(const char* filename, void* memPart) {
-	fileHandle = open(filename, O_RDWR);
+void* ManagedMemory::OpenFile(const char* filename) {
+
+	std::cout << "Open File" << std::endl;
+	struct stat buffer;
+	int status;
+	status = stat(filename, &buffer);
+
+
+	if(buffer.st_size == 0) {
+		// File not yet created
+		std::cout << "No File" << std::endl;
+		fileHandle = fopen(filename, "w");
+		AllocateSpace();
+	} else {
+		std::cout << "File: " << buffer.st_size << std::endl;
+		// File already created
+		curSize = buffer.st_size;
+		fileHandle = fopen(filename, "r+");
+	}
+
 	if(!fileHandle) {
 		//TODO: log error
 		exit(-1);
 	}
-	// if file doesn't exist, allocate space
-	struct stat buffer;
-	int status;
-	status = fstat(fileHandle, &buffer);
-	if(buffer.st_size == 0) {
-		AllocateSpace();
-	} else {
-		curSize = buffer.st_size;
-	}
 
-	memPart = mmap(0, curSize, PROT_READ | PROT_WRITE, MAP_SHARED, fileHandle, 0);
-	mem = memPart;
+	int fno = fileno(fileHandle);
+	mem = mmap(0, curSize, PROT_READ | PROT_WRITE, MAP_SHARED, fno, 0);
+	return mem;
 }

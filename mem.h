@@ -5,12 +5,11 @@
 #ifndef F_MEM_H
 #define F_MEM_H
 
-#pragma once
-#pragma message("MEM_H")
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <iostream>
 
 #ifdef WIN32
 	#include "mmap.h" // mmap emulation layer on Windows
@@ -21,7 +20,7 @@
 
 class ManagedMemory {
 private:
-	int fileHandle;
+	FILE* fileHandle;
 	void AllocateSpace();
 	int curSize;
 	void* mem;
@@ -29,7 +28,7 @@ public:
 	ManagedMemory();
 	ManagedMemory(int p_minSize);
 	~ManagedMemory();
-	void OpenFile(const char* filename, void* memPart);
+	void* OpenFile(const char* filename);
 	void CloseFile();
 	void Resize(int newSize);
 };
