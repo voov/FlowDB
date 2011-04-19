@@ -1,27 +1,42 @@
+#ifndef MMAP_H
+#define MMAP_H
 
+#pragma once
+#pragma message("MMAP")
 
-#include <sys/mman.h>
+// #include <sys/mman.h>
 //// mmap prot flags
+#include <Windows.h>
+#include <WinBase.h>
+#include <io.h>
+
 #define PROT_NONE  0x00 // no access (not supported on Win32)
 #define PROT_READ 0x01
 #define PROT_WRITE 0x02
+
 // mmap flags
 #define MAP_SHARED 0x01 // share changes across processes
 #define MAP_PRIVATE 0x02 // private copy-on-write mapping
 #define MAP_FIXED 0x04
 #define MAP_FAILED 0
+
 extern void* mmap(void* start, size_t len, int prot, int flags, int fd, off_t offset);
 extern int munmap(void* start, size_t len);
 
-void* mmap(void* const user_start, const size_t len, const int prot, const int flags, const int fd, const off_t offset){
-    {
-        WIN_SAVE_LAST_ERROR;
+// cast intptr_t to HANDLE; centralized for easier changing, e.g. avoiding// warnings. i = -1 converts to INVALID_HANDLE_VALUE (same value).
+static inline HANDLE mk_handle(intptr_t i){	
+	return (HANDLE)((char*)0 + i);
+}
+
+void* mmap(void* const user_start, const size_t len, const int prot, const int flags, const int fd, const off_t offset){ 
+	{
+        // WIN_SAVE_LAST_ERROR;
         // assume fd = -1 (requesting mapping backed by page file), // so that we notice invalid file handles below.
         HANDLE hFile = INVALID_HANDLE_VALUE;
         if(fd != -1) {
             hFile = mk_handle(_get_osfhandle(fd));
             if(hFile == INVALID_HANDLE_VALUE) {
-                debug_warn("mmap: invalid file handle");
+                //debug_warn("mmap: invalid file handle");
                 return MAP_FAILED;
             }
         }
@@ -59,7 +74,7 @@ void* mmap(void* const user_start, const size_t len, const int prot, const int f
             }
         }
         // now actually map.
-		const DWORD len_hi = (DWORD)((u64)len >> 32);
+		const DWORD len_hi = (DWORD)((INT64)len >> 32);
         // careful! language doesn't allow shifting 32-bit types by 32 bits.
 		const DWORD len_lo = (DWORD)len & 0xffffffff;
         const HANDLE hMap = CreateFileMapping(hFile, &sec, flProtect, len_hi, len_lo, (LPCSTR)0);
@@ -71,16 +86,18 @@ void* mmap(void* const user_start, const size_t len, const int prot, const int f
         	CloseHandle(hMap);
         if(!ptr) // bail now, before the last error value is restored, // but after freeing the mapping object.
         	return MAP_FAILED;
-        assert(!(flags & MAP_FIXED) || (ptr == start));
+        
+		//assert(!(flags & MAP_FIXED) || (ptr == start));
         // fixed =&gt;
-        ptr = start WIN_RESTORE_LAST_ERROR;
+        //ptr = start WIN_RESTORE_LAST_ERROR;
         return ptr;
     }
 }
 
 int munmap(void* const start, const size_t len){
-    UNUSED(len);
+    // UNUSED(len);
     BOOL ok = UnmapViewOfFile(start);
     return ok? 0 : -1;
 }
 
+#endif

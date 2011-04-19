@@ -1,0 +1,38 @@
+﻿Build started 2011.04.19. 12:57:18.
+     1>Project "D:\Munka\FlowDB\FlowDB.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug_temp\FlowDB.unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_temp\\" /Fd"Debug_temp\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FlowDB.cpp mem.cpp
+         mem.cpp
+         MEM_H
+         MMAP
+     1>mem.cpp(20): warning C4996: 'close': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _close. See online help for details.
+                 C:\Program Files\Microsoft Visual Studio 10.0\VC\include\io.h(302) : see declaration of 'close'
+     1>mem.cpp(25): warning C4996: 'lseek': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _lseek. See online help for details.
+                 C:\Program Files\Microsoft Visual Studio 10.0\VC\include\io.h(310) : see declaration of 'lseek'
+     1>mem.cpp(26): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>mem.cpp(30): warning C4996: 'open': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _open. See online help for details.
+                 C:\Program Files\Microsoft Visual Studio 10.0\VC\include\io.h(312) : see declaration of 'open'
+         Generating Code...
+         Compiling...
+         FlowDB.cpp
+         MEM_H
+         MMAP
+     1>FlowDB.cpp(19): warning C4101: 'rand_ints' : unreferenced local variable
+         Generating Code...
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Munka\FlowDB\Debug_Win32\FlowDB.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug_temp\FlowDB.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\Munka\FlowDB\Debug_Win32\FlowDB.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Munka\FlowDB\Debug_Win32\FlowDB.lib" /MACHINE:X86 Debug_temp\FlowDB.exe.embed.manifest.res
+         Debug_temp\FlowDB.obj
+         Debug_temp\mem.obj
+     1>mem.obj : error LNK2005: "void * __cdecl mmap(void *,unsigned int,int,int,int,long)" (?mmap@@YAPAXPAXIHHHJ@Z) already defined in FlowDB.obj
+     1>mem.obj : error LNK2005: "int __cdecl munmap(void *,unsigned int)" (?munmap@@YAHPAXI@Z) already defined in FlowDB.obj
+     1>D:\Munka\FlowDB\Debug_Win32\FlowDB.exe : fatal error LNK1169: one or more multiply defined symbols found
+     1>Done Building Project "D:\Munka\FlowDB\FlowDB.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.72
