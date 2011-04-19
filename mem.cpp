@@ -23,7 +23,8 @@ void ManagedMemory::CloseFile() {
 void ManagedMemory::AllocateSpace() {
 	if(!fileHandle) exit(-1);
 	fseek(fileHandle, curSize-1, SEEK_SET);
-	fputc('\0', fileHandle);
+	//fputc('\0', fileHandle);
+	fwrite("", 1, 1, fileHandle);
 	fseek(fileHandle, 0, SEEK_SET);
 }
 
