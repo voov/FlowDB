@@ -17,10 +17,13 @@ int main(int argc, char* argv[])
 	//*/
 
 	int *rand_ints;
-	/*ManagedMemory *mem = new ManagedMemory();
-	mem->OpenFile("rand_ints.db", (void *)rand_ints);
+	ManagedMemory *mem = new ManagedMemory();
+	rand_ints = (int *)mem->OpenFile("rand_ints.fdb");
+	//rand_ints = new int[100];
 
-	mem->CloseFile();*/
-	std::getchar();
+	for(int i=0; i<100; i++) rand_ints[i] = i;
+
+	mem->CloseFile();
+	//std::getchar();
 	return 0;
 }
